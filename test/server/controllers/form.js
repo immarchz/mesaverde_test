@@ -28,8 +28,9 @@ exports.create = async (req, res) => {
     const mailOptions = {
       from: "arissawat.tre@gmail.com",
       to: req.body.email,
-      subject: "Form Submission",
-      html: `<p>Thank you for submitting the form. Here are the details:</p>
+      subject: "Pet care information",
+      html: `<p>Thank you for the oppurtunity to take care your pets</p>
+      <p>This is the information of form detail</p>
     <ul>
       <li><strong>Pet Name:</strong> ${req.body.petName}</li>
       <li><strong>Pet ID:</strong> ${req.body.petId}</li>

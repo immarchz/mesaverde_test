@@ -19,27 +19,15 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
   };
 
   const [fileBase64, setFileBase64] = useState<string | null>(null);
-  const [name, setName] = useState("");
-  const [nameError, setNameError] = useState(false);
+  const [empty, setEmpty] = useState("");
+  const [inputError, setInputError] = useState(false);
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const handleEmptyChange = (e) => {
+    setEmpty(e.target.value);
     if (e.target.validity.valid) {
-      setNameError(false);
+      setInputError(false);
     } else {
-      setNameError(true);
-    }
-  };
-
-  const [age, setAge] = useState("");
-  const [ageError, setAgeError] = useState(false);
-  const handleAgeChange = (e) => {
-    setAge(e.target.value);
-    console.log("e.target.value", e.target.value);
-    if (e.target.value >= 18) {
-      setAgeError(false);
-    } else {
-      setAgeError(true);
+      setInputError(true);
     }
   };
 
@@ -50,36 +38,25 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
         placeholder="Enter Your Pet Name"
         fullWidth
         {...register("petName", { required: "Pet Name is required" })}
+        required
         margin="normal"
         name="petName"
-        error={!!errors.petName}
-        helperText={errors.petName ? errors.petName.message : ""}
+        onChange={handleEmptyChange}
+        error={inputError}
+        helperText={inputError ? "Please enter your pet name" : ""}
       />
 
       <TextField
         variant="outlined"
         placeholder="Enter Your Pet Id"
         fullWidth
-        {...register("petId", {
-          required: "Pet ID is required",
-          pattern: {
-            value: /^\d{8}$/,
-            message: "Pet ID must be exactly 8 digits",
-          },
-          validate: (value) =>
-            value.length === 8 || "Pet ID must be exactly 8 digits",
-        })}
+        required
+        {...register("petId", { required: "Pet Id is required" })}
         margin="normal"
         name="petId"
-        error={!!errors.petId}
-        helperText={errors.petId ? errors.petId.message : ""}
-      />
-      <TextField
-        label="Age"
-        value={age}
-        onChange={handleAgeChange}
-        error={ageError}
-        helperText={ageError ? "You must be at least 18 years old" : ""}
+        onChange={handleEmptyChange}
+        error={inputError}
+        helperText={inputError ? "Please enter your pet id" : ""}
       />
 
       <TextField
@@ -87,11 +64,13 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
         variant="outlined"
         placeholder="Enter Your Pet Age"
         fullWidth
+        required
         {...register("petAge", { required: "Pet Age is required" })}
         margin="normal"
         name="petAge"
-        error={!!errors.petAge}
-        helperText={errors.petAge ? errors.petAge.message : ""}
+        onChange={handleEmptyChange}
+        error={inputError}
+        helperText={inputError ? "Please enter your pet age" : ""}
       />
 
       <div className="mt-1">
@@ -100,6 +79,7 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
           type="file"
           variant="outlined"
           fullWidth
+          required
           {...register("petPic", { required: "Pet Picture is required" })}
           margin="normal"
           name="petPic"

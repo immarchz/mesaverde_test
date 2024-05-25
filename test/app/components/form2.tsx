@@ -26,7 +26,12 @@ const Form2: React.FC<stepProps> = ({ register, errors }) => {
         variant="outlined"
         placeholder="Enter Your Email Address"
         fullWidth
-        {...register("email", { required: true })}
+        {...register("email", {
+          pattern: {
+            value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+            message: "Invalid Email Format",
+          },
+        })}
         margin="normal"
         name="email"
       />

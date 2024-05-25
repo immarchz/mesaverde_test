@@ -1,0 +1,10 @@
+const express = require("express");
+const router = express.Router();
+// const multer = require("multer");
+// const upload = multer();
+const { list, create } = require("../controllers/form");
+router.use(express.json());
+router.get("/form", list);
+// router.post("/form", create);
+router.post("/form", create);
+module.exports = router;

@@ -30,15 +30,30 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
       setNameError(true);
     }
   };
+
+  const [age, setAge] = useState("");
+  const [ageError, setAgeError] = useState(false);
+  const handleAgeChange = (e) => {
+    setAge(e.target.value);
+    console.log("e.target.value", e.target.value);
+    if (e.target.value >= 18) {
+      setAgeError(false);
+    } else {
+      setAgeError(true);
+    }
+  };
+
   return (
     <>
       <TextField
         variant="outlined"
         placeholder="Enter Your Pet Name"
         fullWidth
-        {...register("petName")}
+        {...register("petName", { required: "Pet Name is required" })}
         margin="normal"
         name="petName"
+        error={!!errors.petName}
+        helperText={errors.petName ? errors.petName.message : ""}
       />
 
       <TextField
@@ -47,31 +62,50 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
         fullWidth
         {...register("petId", {
           required: "Pet ID is required",
+          pattern: {
+            value: /^\d{8}$/,
+            message: "Pet ID must be exactly 8 digits",
+          },
+          validate: (value) =>
+            value.length === 8 || "Pet ID must be exactly 8 digits",
         })}
         margin="normal"
-        error={!!errors.petId}
-        helperText={errors.petId?.message}
         name="petId"
+        error={!!errors.petId}
+        helperText={errors.petId ? errors.petId.message : ""}
       />
+      <TextField
+        label="Age"
+        value={age}
+        onChange={handleAgeChange}
+        error={ageError}
+        helperText={ageError ? "You must be at least 18 years old" : ""}
+      />
+
       <TextField
         type="number"
         variant="outlined"
         placeholder="Enter Your Pet Age"
         fullWidth
-        {...register("petAge", { required: true })}
+        {...register("petAge", { required: "Pet Age is required" })}
         margin="normal"
         name="petAge"
+        error={!!errors.petAge}
+        helperText={errors.petAge ? errors.petAge.message : ""}
       />
-      <div className="mt-1 ">
-        <label> Pet Picture</label>
+
+      <div className="mt-1">
+        <label>Pet Picture</label>
         <TextField
           type="file"
           variant="outlined"
           fullWidth
-          {...register("petPic", { required: true })}
+          {...register("petPic", { required: "Pet Picture is required" })}
           margin="normal"
           name="petPic"
           onChange={onFileChange}
+          error={!!errors.petPic}
+          helperText={errors.petPic ? errors.petPic.message : ""}
         />
         {fileBase64 && (
           <img

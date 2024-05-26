@@ -1,11 +1,11 @@
 ## Getting Started
-#Frontend Part
+Frontend Part
 ```bash
 npm i
 cd test
 npm run dev
 ```
-#Backend Part
+Backend Part
 ```bash
 cd test
 cd server

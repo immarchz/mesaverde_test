@@ -22,7 +22,7 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
   const [empty, setEmpty] = useState("");
   const [inputError, setInputError] = useState(false);
 
-  const handleEmptyChange = (e) => {
+  const handleEmptyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmpty(e.target.value);
     if (e.target.validity.valid) {
       setInputError(false);
@@ -31,6 +31,8 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
     }
   };
 
+  const ALPHA_NUMERIC_DASH_REGEX = /^[a-zA-Z-]+$/;
+
   return (
     <>
       <TextField
@@ -38,12 +40,16 @@ const Form1: React.FC<StepProps> = ({ register, errors, handleFileChange }) => {
         placeholder="Enter Your Pet Name"
         fullWidth
         {...register("petName", { required: "Pet Name is required" })}
-        required
         margin="normal"
         name="petName"
         onChange={handleEmptyChange}
         error={inputError}
         helperText={inputError ? "Please enter your pet name" : ""}
+        onKeyDown={(event) => {
+          if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
+            event.preventDefault();
+          }
+        }}
       />
 
       <TextField

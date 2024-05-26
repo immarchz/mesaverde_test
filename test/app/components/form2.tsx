@@ -5,9 +5,9 @@ import { FormInput, stepProps } from "./stepper";
 
 const Form2: React.FC<stepProps> = ({ register, errors }) => {
   const [empty, setEmpty] = useState("");
-  const [inputError, setInputError] = useState(false);
+  const [inputError, setInputError] = useState<string | boolean>(false);
   const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState(false);
+  const [emailError, setEmailError] = useState<string | boolean>(false);
 
   const handleEmptyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmpty(e.target.value);
@@ -26,39 +26,44 @@ const Form2: React.FC<stepProps> = ({ register, errors }) => {
       setEmailError(true);
     }
   };
+
+  const ALPHA_NUMERIC_DASH_REGEX = /^[a-zA-Z-]+$/;
   return (
     <>
       <TextField
         variant="outlined"
         placeholder="Enter Your Name"
         fullWidth
-        required
         {...register("name", { required: true })}
         margin="normal"
         name="name"
         onChange={handleEmptyChange}
         error={inputError}
         helperText={inputError ? "Please enter your name" : ""}
+        onKeyDown={(event) => {
+          if (!ALPHA_NUMERIC_DASH_REGEX.test(event.key)) {
+            event.preventDefault();
+          }
+        }}
       />
       <TextField
         variant="outlined"
         placeholder="Enter Your Phone Number"
         fullWidth
-        required
         {...register("phone", { required: true })}
         margin="normal"
-        name="phone"
         onChange={handleEmptyChange}
         error={inputError}
         helperText={inputError ? "Please enter your phone number" : ""}
+        name="phone"
       />
       <TextField
         variant="outlined"
-        required
         placeholder="Enter Your Email Address"
+       
         fullWidth
         {...register("email", { required: true })}
-        value={email}
+        
         onChange={handleEmailChange}
         error={emailError}
         helperText={emailError ? "Please enter a valid email" : ""}

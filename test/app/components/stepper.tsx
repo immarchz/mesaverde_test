@@ -1,6 +1,6 @@
 "use client";
 import { Button, Step, StepLabel, Stepper, Box } from "@mui/material";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Form1 from "./form1";
 import Form2 from "./form2";
 import Form3 from "./form3";
@@ -56,9 +56,9 @@ const StepperComponent: React.FC = () => {
     id: "",
     address: "",
   });
-
   const savedData = localStorage.getItem("formData");
   useEffect(() => {
+    
     if (savedData) {
       const parsedData: FormInput = JSON.parse(savedData);
       setFormData(parsedData);
@@ -76,7 +76,7 @@ const StepperComponent: React.FC = () => {
     if (savedFileBase64) {
       setFileBase64(savedFileBase64);
     }
-  }, []);
+  }, [setValue]);
 
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
@@ -106,8 +106,9 @@ const StepperComponent: React.FC = () => {
 
   const handleSave = () => {
     const currentValues = getValues();
-    setFormData({ ...formData, ...currentValues });
+    const updatedFormData = { ...formData, ...currentValues };
 
+    setFormData(updatedFormData);
     localStorage.setItem(
       "formData",
       JSON.stringify({ ...formData, ...currentValues })
@@ -117,6 +118,27 @@ const StepperComponent: React.FC = () => {
       localStorage.setItem("fileBase64", fileBase64);
     }
     alert("Form data saved!");
+  };
+
+  const handleReset = () => {
+    setFormData({
+      petName: "",
+      petId: "",
+      petAge: 0,
+      petPic: "",
+      name: "",
+      phone: "",
+      email: "",
+      id: "",
+      address: "",
+    });
+    setFileBase64(null);
+    setActiveStep(0);
+    reset();
+    alert("Form has been reset!")
+    localStorage.removeItem("formData");
+    localStorage.removeItem("activeStep");
+    localStorage.removeItem("fileBase64");
   };
 
   const onSubmit: SubmitHandler<FormInput> = async (data) => {
@@ -140,7 +162,6 @@ const StepperComponent: React.FC = () => {
       const result = await response.json();
       console.log("Success:", result);
 
-      // Clear local storage and reset form
       localStorage.removeItem("formData");
       localStorage.removeItem("activeStep");
       localStorage.removeItem("fileBase64");
@@ -187,15 +208,17 @@ const StepperComponent: React.FC = () => {
           <Button disabled={activeStep === 0} onClick={handleBack}>
             Back
           </Button>
-          {activeStep === steps.length - 1 ? (
-            <Button type="submit">Submit</Button>
-          ) : (
-            <Button onClick={handleNext}>Next</Button>
-          )}
+            <Button type="submit" disabled={activeStep != steps.length - 1 }>Submit Form</Button>
+            <Button type="button" disabled={activeStep === steps.length - 1}  onClick={handleNext}>
+              Next
+            </Button>
         </Box>
       </form>
       <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
-        <Button onClick={handleSave}>Save</Button>
+        <Button onClick={handleSave}>Save Information</Button>
+      </Box>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Button onClick={handleReset}>Reset Information</Button>
       </Box>
     </div>
   );

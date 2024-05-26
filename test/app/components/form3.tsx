@@ -16,6 +16,9 @@ const Form3: React.FC<stepProps> = ({ register, errors }) => {
     } else {
       setIdError(false);
     }
+    if (e.target.value.length > 13) {
+      e.target.value = e.target.value.slice(0, 13); // Ensure maximum length of 13
+    }
   };
 
   const handleEmptyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +34,6 @@ const Form3: React.FC<stepProps> = ({ register, errors }) => {
     <>
       <TextField
         variant="outlined"
-        required
         type="number"
         placeholder="Enter Your ID Card"
         fullWidth
@@ -41,10 +43,11 @@ const Form3: React.FC<stepProps> = ({ register, errors }) => {
         helperText={idError ? "Id must have 13 characters long" : ""}
         margin="normal"
         name="id"
+        onInput = {handleIdChange}
       />
       <TextField
         variant="outlined"
-        required
+      
         placeholder="Enter Your Address"
         fullWidth
         {...register("address", { required: true })}
